@@ -45,6 +45,7 @@ Overall, MongoDB's dynamic schema and scalability make it more suitable for rapi
 ![Screenshot 2022-03-28 at 23 58 09](https://github.com/shripalshaha1/Database_Management_System_Project/assets/113332807/54c71397-df30-4ff1-8a88-7686003c1fdf)
 For SQL
 
+
 ![6](https://github.com/shripalshaha1/Database_Management_System_Project/assets/113332807/8202a027-1c7d-4ffe-ad77-4f3e1592fa24)
 For NoSQL
 
