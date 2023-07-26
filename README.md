@@ -21,6 +21,7 @@ A relational database was designed using MySQL to store movies, users, profiles,
 MongoDB was used to store the data in a flexible document model instead of separate tables.
 
 ![Document structure for storing related movie and user data](SJSU_Movie_Database_using_NoSQL/All Images/5.jpeg)
+![Document Model](https://user-images.githubusercontent.com/121697990/222988761-a6d15db8-7c02-4f96-8d26-908c01e9d60f.png) 
 
 #### Document structure for storing related movie and user data
 
