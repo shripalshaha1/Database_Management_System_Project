@@ -22,7 +22,6 @@ MongoDB was used to store the data in a flexible document model instead of separ
 
 ![5](https://github.com/shripalshaha1/Database_Management_System_Project/assets/113332807/3c25da4c-32ea-4050-9270-7806c3d739b7)
 
-
 #### Document structure for storing related movie and user data
 
 * Related data is embedded within documents instead of normalized across multiple tables. This denormalized data model improves performance for reads and throughput.
