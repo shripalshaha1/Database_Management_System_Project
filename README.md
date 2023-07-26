@@ -50,3 +50,19 @@ Overall, MongoDB's dynamic schema and scalability make it more suitable for rapi
 
 
 In summary, both SQL and NoSQL databases have their pros and cons. The optimal choice depends on the specific application, data, and performance needs. This project provided valuable experience in modeling, implementing and optimizing databases using both relational and non-relational approaches.
+
+
+## Leveraging Managed Database Services on AWS
+
+Both implementations of the SJSU Movie Database leverage managed database services on AWS cloud to automate and simplify database administration. This enables focusing engineering efforts on application logic rather than infrastructure management.
+
+### For MySQL
+Specifically, the MySQL implementation deploys the relational database on Amazon RDS (Relational Database Service). RDS provides a fully managed DB instance for MySQL, handling tasks like backups, software updates, failure detection, recovery, and more. The RDS API allows programmatically scaling the MySQL database up or down on demand.
+
+
+### For NoSQL
+For the MongoDB document database implementation, the Atlas managed service is used. Atlas is MongoDB's own Database-as-a-Service (DBaaS) optimized specifically for MongoDB deployments. It offers auto-scaling, redundancy, and security capabilities tailored to MongoDB. Using Atlas reduces the operational overhead of managing MongoDB clusters across different cloud providers.
+
+
+
+By leveraging these fully managed database services on AWS, both MySQL and MongoDB can be deployed, managed, monitored, and scaled efficiently. This enables focusing development efforts on building application logic and domain functionality rather than database administration. The automated management and availability provided by RDS and Atlas are well suited for a cloud-based movie management application like the SJSU Movie Database system.
