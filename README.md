@@ -43,11 +43,10 @@ Overall, MongoDB's dynamic schema and scalability make it more suitable for rapi
 ### Performance measured for both SQL and NoSQL
 
 ![Screenshot 2022-03-28 at 23 58 09](https://github.com/shripalshaha1/Database_Management_System_Project/assets/113332807/54c71397-df30-4ff1-8a88-7686003c1fdf)
-For SQL
 
 
 ![6](https://github.com/shripalshaha1/Database_Management_System_Project/assets/113332807/8202a027-1c7d-4ffe-ad77-4f3e1592fa24)
-For NoSQL
+
 
 
 In summary, both SQL and NoSQL databases have their pros and cons. The optimal choice depends on the specific application, data, and performance needs. This project provided valuable experience in modeling, implementing and optimizing databases using both relational and non-relational approaches.
