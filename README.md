@@ -1,35 +1,35 @@
 # SJSU Movie Database System
-The SJSU Movie Database (SMD) project aims to design and implement a database to store and manage information about movies, users, profiles, subscriptions, and billing. The goal is to build a system similar to Netflix where users can search movies, create profiles, subscribe to plans, etc.
 
-## Two implementations of the database are developed and compared:
+The SJSU Movie Database (SMD) project aims to design and implement a database to store and manage information about movies, users, profiles, subscriptions, and billing. The goal is to build a system similar to Netflix where users can search, rate and review movies and manage their accounts.
 
-### 1. Relational database using MySQL
-* Uses ER diagram and relational schema to model movies, users, profiles, billing etc. as separate relational tables.
-  
-* Implements core functions like user signup, creating profiles, searching movies, filtering by criteria, updating ratings/likes, generating statements etc. using SQL queries, triggers and stored procedures.
-  
-* Optimized to leverage MySQL's capabilities like transactions, indexing, constraints for a robust relational database.
+## Two database implementations were developed and compared:
 
-  
-### 2. Document database using MongoDB
-*Flexible schema stores movies, users, profiles as nested documents instead of separate tables.
+### 1. Relational Database Design
+A relational database was designed using MySQL to store movies, users, profiles, and related data in separate tables.
 
-*Implements same key functions using MongoDB queries, aggregations leveraging its dynamic document model and native indexing.
+![ER Diagram of the relational schema](SJSU_Movie_Database_using_MySQL/ER-3.png) 
 
-*Embedded data model and denormalization optimizes for faster reads and throughput for this use case.
+ER Diagram of the relational schema
 
-## Key objectives:
+The ER diagram shows the entities - Movies, Genre, Cast, Customers, Accounts, Profiles, Subscriptions, Billing, etc. and the relationships between them.
 
-* Compare SQL vs NoSQL databases for implementing a real-world movie management system.
+Key functions like search, filters, CRUD operations, and analytics were implemented using SQL queries, triggers, and stored procedures in MySQL. Transactions, indexing and constraints ensure data integrity.
 
-* Evaluate pros and cons of relational vs document model for this application.
+2. Document Database Design
+MongoDB was used to store the data in a flexible document model instead of separate tables.
 
-* Implement core functionalities like search, filters, CRUD operations, analytics in both databases.
+Document Model
 
-* Analyze performance of queries, updates, scalability using metrics.
+Document structure for storing related movie and user data
 
-* Demonstrate modeling, schema design, query optimization principles.
+Related data is embedded within documents instead of normalized across multiple tables. This denormalized data model improves performance for reads and throughput.
 
-* Highlight similarites and differences in capabilities of MySQL and MongoDB.
+The same key functions were implemented using MongoDB queries and aggregations. Indexing and embedding optimize for faster access compared to joins.
 
-The project provides hands-on experience in designing, implementing and optimizing databases for a complex domain using both SQL and NoSQL. The analysis aims to determine the optimal database technology based on the application requirements, data properties and performance needs.
+Comparison and Conclusion
+MySQL relational model has better data integrity, and isolation and suits applications with transactional data.
+MongoDB document model is more flexible, scalable and provides higher performance for reads and writes.
+For this movie management use case, MongoDB provided faster performance for queries, inserts, and updates compared to MySQL.
+However, MySQL was better for simple searches due to full-text indexing and native query optimization.
+Overall, MongoDB's dynamic schema and scalability make it more suitable for rapidly evolving data and changing application requirements.
+In summary, both SQL and NoSQL databases have their pros and cons. The optimal choice depends on the specific application, data, and performance needs. This project provided valuable experience in modeling, implementing and optimizing databases using both relational and non-relational approaches.
