@@ -1,0 +1,233 @@
+from pymongo import MongoClient
+client = MongoClient()
+db = client.netDB
+account_collection = db.account_collection
+movie_collection = db.movie_collection
+billing_collection = db.billing_collection
+
+# Showing total movies count and their average time by genre
+total_movies = movie_collection.find({}).count()
+print("Total nmber of movies: ", total_movies)
+
+for genre in genre_list:
+    avg_runtime = movie_collection.aggregate([ 
+    {"$unwind": "$Genre"},
+    {"$match": {"Genre": genre}},
+    {"$group": {"_id": genre, "avg_runtime": {"$avg": "$Runtime"}}}
+    ])
+    for a_r in avg_runtime:
+        print(a_r)
+
+# Showing movies watched by members
+for account in account_collection.find({"id": "1"}):
+    for member in account['members']:
+        print(member)
+        for movie in member['movies']:
+            result = movie_collection.find_one({'_id': movie})
+            print(result)
+
+# Showing billing info
+for billing in billing_collection.find():
+    print(billing)
+
+# Showing what movies does a member watched with their timings
+for account in account_collection.find({"id": "1"}):
+    for member in account['members']:
+        print(member)
+        for movie in member['movies']:
+            result = movie_collection.find_one({'_id': movie})
+            print(result)
+            watched_collection.insert_one(result)
+for watched in watched_collection.find():
+    print(watched)
+
+# Showing top 10 movies with best ratings
+top_rated = movie_collection.aggregate([
+    {"$unwind": "$Ratings"},
+    {"$match": {"Ratings.Source": "Internet Movie Database"}},
+    {"$sort": {"Ratings.Value": -1}},
+    {"$limit": 10}
+    ])
+for top in top_rated:
+    print(top)
+
+# Showing movies starting with particular word
+result = movie_collection.find({"Title": {"$regex": "^[D].*"}})
+for r in result:
+    print(r)
+
+# Showing movies with particular rating
+for r in movie_collection.find({"Ratings.Value": "8.9/10"}):
+    print(r)
+
+# Showing movies with rating higher than
+for r in movie_collection.find({"Ratings.Value": {"$gt": "8.9/10"}}):
+    print(r)
+
+# Showing movies with rating less than
+for r in movie_collection.find({"Ratings.Value": {"$lt": "8.9/10"}}):
+    print(r)
+
+MongoDB Python Client:
+from pymongo import MongoClient
+
+client = MongoClient()
+db = client.sflix
+
+# Showing total movies count and their average time by genre.
+for x in db.movies.aggregate([
+    {"$unwind": "$genre"},
+    {"$group": {"_id": "$genre",
+                "total_time": {"$sum": "$runtime"},
+                "average_time": {"$avg": "$runtime"},
+                "movie_count": {"$sum": 1}}},
+    {"$sort": {"movie_count": -1}},
+    {"$project": {"_id": 0, "genre": "$_id", "average_time": 1, "movie_count": 1}}
+]):
+    print(x)
+    
+# Showing total movies count by actors.
+for x in db.movies.aggregate([
+    {"$unwind": "$actors"},
+    {"$group": {"_id": "$actors", "movie_count": {"$sum": 1}}},
+    {"$sort": {"movie_count": -1}},
+    {"$project": {"_id": 0, "actor": "$_id", "movie_count": 1}}
+]):
+    print(x)
+    
+# Showing the account that has watched the most of total time.
+for x in db.watched.aggregate([
+    {"$lookup": {"from": "accounts", "localField": "profile", "foreignField": "profiles.profile_id", "as": "profile_info"}},
+    {"$unwind": "$profile_info"},
+    {"$unwind": "$profile_info.profiles"},
+    {"$lookup": {"from": "movies", "localField": "movie", "foreignField": "_id", "as": "movie_info"}},
+    {"$unwind": "$movie_info"},
+    {"$group": {"_id": "$profile_info.email",
+                "total_time": {"$sum": "$movie_info.runtime"}}},
+    {"$sort": {"total_time": -1}},
+    {"$limit": 1}
+]):
+    print(x)
+
+# Showing the most rated movies and their avg. rating by the users.
+for x in db.watched.aggregate([
+    {"$lookup": {"from": "movies", "localField": "movie", "foreignField": "_id", "as": "movie_info"}},
+    {"$unwind": "$movie_info"},
+    {"$group": {"_id": "$movie_info.title",
+                "avg_rating": {"$avg": "$rating"}}},
+    {"$sort": {"avg_rating": -1}},
+    {"$limit": 5}
+]):
+    print(x)
+    
+# Showing the user that has rated the most of the movies.
+for x in db.watched.aggregate([
+    {"$lookup": {"from": "accounts", "localField": "profile", "foreignField": "profiles.profile_id", "as": "profile_info"}},
+    {"$unwind": "$profile_info"},
+    {"$group": {"_id": "$profile_info.email",
+                "movie_count": {"$sum": 1}}},
+    {"$sort": {"movie_count": -1}},
+    {"$limit": 1}
+]):
+    print(x)
+    
+# Showing the total number of watchlists by genres.
+for x in db.watchlist.aggregate([
+    {"$lookup": {"from": "movies", "localField": "movie", "foreignField": "_id", "as": "movie_info"}},
+    {"$unwind": "$movie_info"},
+    {"$unwind": "$movie_info.genre"},
+    {"$group": {"_id": "$movie_info.genre",
+                "watchlist_count": {"$sum": 1}}},
+    {"$sort": {"watchlist_count": -1}}
+]):
+    print(x)
+    
+# Showing the total number of billing by each month from 2021 to 2024.
+for x in db.accounts.aggregate([
+    {"$unwind": "$billing_history"},
+    {"$project": {"_id": 0, "month": {"$month": "$billing_history.billing_date"},
+                  "year": {"$year": "$billing_history.billing_date"},
+                  "billing_id": 1}},
+    {"$match": {"year": {"$gte": 2021, "$lte": 2024}}},
+    {"$group": {"_id": {"year": "$year", "month": "$month"},
+                "billing_count": {"$sum": 1}}},
+    {"$sort": {"_id.year": 1, "_id.month": 1}}
+]):
+    print(x)
+
+# Showing the total number of complaints by each month from 2021 to 2024.
+for x in db.accounts.aggregate([
+    {"$unwind": "$service_requests"},
+    {"$project": {"_id": 0, "month": {"$month": "$service_requests.date"},
+                  "year": {"$year": "$service_requests.date"},
+                  "service_id": 1}},
+    {"$match": {"year": {"$gte": 2021, "$lte": 2024}}},
+    {"$group": {"_id": {"year": "$year", "month": "$month"},
+                "complaint_count": {"$sum": 1}}},
+    {"$sort": {"_id.year": 1, "_id.month": 1}}
+]):
+    print(x)
+    
+# Showing the total number of movies by each year from 2012 to 2019.
+for x in db.movies.aggregate([
+    {"$project": {"_id": 0, "year": {"$year": "$year"}}},
+    {"$match": {"year": {"$gte": 2012, "$lte": 2019}}},
+    {"$group": {"_id": "$year",
+                "movie_count": {"$sum": 1}}}
+]):
+    print(x)
+
+# Showing the total number of movies by each rating from 1 to 10.
+for x in db.movies.aggregate([
+    {"$project": {"_id": 0, "rating": {"$subtract": [{"$trunc": {"$divide": ["$rating", 1]}}, {"$trunc": {"$divide": ["$rating", 1]}}]}}},
+    {"$match": {"rating": {"$gte": 0, "$lte": 10}}},
+    {"$group": {"_id": "$rating",
+                "movie_count": {"$sum": 1}}},
+    {"$sort": {"_id": 1}}
+]):
+    print(x)
+    
+# Showing the total number of movies by each director.
+for x in db.movies.aggregate([
+    {"$unwind": "$directors"},
+    {"$group": {"_id": "$directors",
+                "movie_count": {"$sum": 1}}},
+    {"$sort": {"movie_count": -1}}
+]):
+    print(x)
+
+# Showing the total number of movies by each genre.
+for x in db.movies.aggregate([
+    {"$unwind": "$genre"},
+    {"$group": {"_id": "$genre",
+                "movie_count": {"$sum": 1}}},
+    {"$sort": {"movie_count": -1}}
+]):
+    print(x)
+
+# Showing the total number of movies by each actor.
+for x in db.movies.aggregate([
+    {"$unwind": "$actors"},
+    {"$group": {"_id": "$actors",
+                "movie_count": {"$sum": 1}}},
+    {"$sort": {"movie_count": -1}}
+]):
+    print(x)
+    
+# Showing the top 5 most rated movies.
+for x in db.watched.aggregate([
+    {"$lookup": {"from": "movies", "localField": "movie", "foreignField": "_id", "as": "movie_info"}},
+    {"$unwind": "$movie_info"},
+    {"$group": {"_id": "$movie_info.title",
+                "avg_rating": {"$avg": "$rating"}}},
+    {"$sort": {"avg_rating": -1}},
+    {"$limit": 5}
+]):
+    print(x)
+
+# Showing the top 5 most voted movies.
+for x in db.movies.aggregate([
+    {"$sort": {"votes": -1}},
+    {"$limit": 5}
+]):
+    print(x)

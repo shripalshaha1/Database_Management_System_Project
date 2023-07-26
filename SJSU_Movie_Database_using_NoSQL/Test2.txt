@@ -1,0 +1,167 @@
+MongoDB Python Client:
+from pymongo import MongoClient
+
+client = MongoClient()
+db = client.sflix
+
+# Showing total movies count and their average time by genre.
+for x in db.movies.aggregate([
+    {"$unwind": "$genre"},
+    {"$group": {"_id": "$genre",
+                "total_time": {"$sum": "$runtime"},
+                "average_time": {"$avg": "$runtime"},
+                "movie_count": {"$sum": 1}}},
+    {"$sort": {"movie_count": -1}},
+    {"$project": {"_id": 0, "genre": "$_id", "average_time": 1, "movie_count": 1}}
+]):
+    print(x)
+    
+# Check if account exist using email
+if(db.accounts.find_one({"email": email})):
+    print("Account already exist")
+
+# Create new account
+db.accounts.insert_one({
+    "_id": "A2",
+    "name": "Bobby",
+    "email": "bobby@sjsu.edu",
+    "username": "bobby",
+    "password": "bobby123",
+    "birthday": "01/12/1969",
+    "payment_method": "credit_card",
+    "subscription": {
+    },
+    "billing_history": [
+    ],
+    "profiles": [
+    ],
+    "service_requests": [
+    ]
+})
+
+# Create a new profile for the account
+db.accounts.update_one(
+    {"email": "bobby@sjsu.edu"},
+    {"$push": {"profiles": {"profile_id": "A2P1", "profile_name": "Bobby1", "age_restricted": false}}})
+
+# Access available profiles options for given/logged account
+db.accounts.find({"email": "bobby@sjsu.edu"}, {"profiles": {"profile_id": 1, "profile_name": 1, "_id": 0}})
+
+# Finding Movies data with Search Keywords: 'Guardians'
+for x in db.movies.find({"$or": [{"title": {"$regex": "Guardians"}}, {"genre": "Sci-Fi"}]}, {"_id": 0, "title": 1, "genre": 1}):
+    print(x)
+
+# Finding all Watched Movies from a given/logged profile
+for x in db.watched.find({"profile": "A1P1"}):
+    print(x)
+
+# Filter Movies data based on ratings and genres
+for x in db.movies.find({"genre": "Action", "rating": {"$gte": 7}}, {"_id": 0, "title": 1, "genre": 1, "rating": 1}):
+    print(x)
+
+# Open Movie Page for Full information of the Movie using Movie ID (M1)
+for x in db.movies.find({"_id": "M1"}):
+    print(x)
+
+# Getting the content URL for streaming the movie.
+for x in db.movies.find({"_id": "M1"}, {"_id": 0, "content_url": 1}):
+    print(x)
+
+# Account info showing user’s data including all profiles.
+for x in db.accounts.find({"email": "bobby@sjsu.edu"}, {"_id": 0, "email": 1, "name": 1, "profiles": 1}):
+    print(x)
+
+# Profile information showing all watched movies and likes/dislikes.
+for x in db.watched.find({"profile": "A1P1"}, {"_id": 0, "movie": 1, "rating": 1, "liked": 1}):
+    print(x)
+
+# Get Movies available in chronological order of watching them/most recent first.
+for x in db.watched.find({"profile": "A1P1"}, {"_id": 0, "movie": 1, "timeline": 1}).sort("timeline", -1):
+    print(x)
+
+# Getting billing history for the account
+for x in db.accounts.find({"email": "bobby@sjsu.edu"}, {"_id": 0, "billing_history": 1}):
+    print(x)
+
+# Generate current month’s Statement for Billing
+for x in db.accounts.aggregate([
+    {"$match": {"email": "bobby@sjsu.edu"}},
+    {"$unwind": "$billing_history"},
+    {"$match": {"billing_history.billing_month": "current_month", "billing_history.payment_status": "unpaid"}}
+]):
+    print(x)
+
+# Likes and Rating for particular watched movie
+for x in db.watched.find({"profile": "A1P1", "movie": "M1"}, {"_id": 0, "movie": 1, "liked": 1, "rating": 1}):
+    print(x)
+
+# Showing total movies count and their average time by genre and order by movie count.
+for x in db.movies.aggregate([
+    {"$unwind": "$genre"},
+    {"$group": {"_id": "$genre",
+                "total_time": {"$sum": "$runtime"},
+                "average_time": {"$avg": "$runtime"},
+                "movie_count": {"$sum": 1}}},
+    {"$sort": {"movie_count": -1}},
+    {"$project": {"_id": 0, "genre": "$_id", "average_time": 1, "movie_count": 1}}
+]):
+    print(x)
+
+# Showing Average rating based on viewer’s rating and IMDB rating.
+for x in db.watched.aggregate([
+    {"$match": {"profile": "A1P1"}},
+    {"$lookup": {
+        "from": "movies",
+        "localField": "movie",
+        "foreignField": "_id",
+        "as": "movie_data"
+    }},
+    {"$unwind": "$movie_data"},
+    {"$project": {"_id": 0, "movie": "$movie", "average_rating": {"$avg": ["$rating", "$movie_data.rating"]}}}
+]):
+    print(x)
+
+# Showing all the unreviewed movies watched by the user
+for x in db.watched.aggregate([
+    {"$match": {"profile": "A1P1", "liked": { "$exists": False }}},
+    {"$lookup": {
+        "from": "movies",
+        "localField": "movie",
+        "foreignField": "_id",
+        "as": "movie_data"
+    }},
+    {"$unwind": "$movie_data"},
+    {"$project": {"_id": 0, "movie": "$movie", "movie_data": 1}}
+]):
+    print(x)
+
+# Watch history page showing which movie users have seen till now
+for x in db.watched.aggregate([
+    {"$match": {"profile": "A1P1"}},
+    {"$lookup": {
+        "from": "movies",
+        "localField": "movie",
+        "foreignField": "_id",
+        "as": "movie_data"
+    }},
+    {"$unwind": "$movie_data"},
+    {"$project": {"_id": 0, "movie": "$movie", "movie_data": 1}}
+]):
+    print(x)
+
+# Customer Service Request page to send issue about account or movie etc
+db.accounts.update_one(
+    {"email": "bobby@sjsu.edu"},
+    {"$push": {"service_requests": {"service_id": "id", "complaint": "movie problem", "status": "submitted", "date": "03/03/2020", "time": "23:00", "isresolved": false}}})
+
+# Get all the service requests for a user account
+for x in db.accounts.find({"email": "bobby@sjsu.edu"}, {"service_requests": 1}):
+    print(x)
+
+# Get my service requests number of unresolved service requests
+db.accounts.aggregate([
+    {"$match": {"email": "bobby@sjsu.edu"}},
+    {"$unwind": "$service_requests"},
+    {"$match": {"service_requests.isresolved": false}},
+    {"$count": "number_of_unresolved"}
+])

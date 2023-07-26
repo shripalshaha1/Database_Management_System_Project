@@ -1,0 +1,9 @@
+{
+    "_id": "P1",
+    "plan_name": "Premium",
+    "plan_price": 19.95,
+    "plan_description": "Premium Plan",
+    "plan_duration": "1 Month",
+    "plan_features": "4K HDR + Full HD",
+    "profile_limit": 5
+}

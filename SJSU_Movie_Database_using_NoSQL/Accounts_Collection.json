@@ -1,0 +1,140 @@
+[    
+    {
+        "_id": "A1",
+        "name": "Shim",
+        "email": "Shim@sjsu.edu",
+        "username": "ShimShim",
+        "password": "Shim@123",
+        "birthday": "01/12/1969",
+        "payment_method": "credit_card",
+        "subscription": {
+            "plan": "P1",
+            "subcription_status": "active",
+            "subcription_type": "monthly",
+            "subcription_date": "02/01/2021",
+            "subcription_end_date": "03/01/2021"
+        },
+        "billing_history": [
+            {
+                "billing_id": "A1B2",
+                "billing_amount": 19.95,
+                "billing_date": "03/02/2022",
+                "payment_status": "paid"
+            },
+            {
+                "billing_id": "A1B1",
+                "billing_amount": 19.95,
+                "billing_date": "02/01/2022",
+                "payment_status": "unpaid"
+            }
+        ],
+        "profiles": [
+            {   
+                "profile_id": "A1P2",
+                "profile_name": "Shim2",
+                "age_restriction": false
+            },
+            {
+                "profile_id": "A1P1",
+                "profile_name": "Shim1",
+                "age_restriction": false
+            }
+        ],
+        "service_requests": [
+            {
+                "service_id": "A1S1",
+                "complaint": "I want to get a new Apple TV",
+                "status": "complete",
+                "date": "01/01/2022",
+                "time": "10:00",
+                "isresolved": true
+            }
+        ]
+    },
+    {
+        "_id": "A2",
+        "name": "Kamal",
+        "email": "Kamal@sjsu.edu",
+        "username": "KamalP",
+        "password": "Kamal@123",
+        "birthday": "09/12/1995",
+        "payment_method": "credit_card",
+        "subscription": {
+            "subcription_status": "inactive"
+        },
+        "billing_history": [
+            {
+                "billing_id": "A2B1",
+                "billing_amount": 19.95,
+                "billing_date": "03/03/2022",
+                "payment_status": "unpaid"
+            }
+        ],
+        "profiles": [
+        ],
+        "service_requests": [
+            {
+                "service_id": "A2S1",
+                "complaint": "I am not able to activate my account",
+                "status": "resolving",
+                "date": "03/03/2022",
+                "time": "10:00",
+                "isresolved": false
+            }
+        ]
+    },
+    {
+        "_id": "A3",
+        "name": "KuldipP",
+        "email": "Kuldip@sjsu.edu",
+        "username": "KuldipP",
+        "password": "Kuldip@123",
+        "birthday": "10/01/1999",
+        "payment_method": "debit_card",
+        "subscription": {
+            "plan": "P1",
+            "subcription_status": "active",
+            "subcription_type": "monthly",
+            "subcription_date": "03/02/2022",
+            "subcription_end_date": "04/01/2022"
+        },
+        "billing_history": [
+            {
+                "billing_id": "A3B1",
+                "billing_amount": 19.95,
+                "billing_date": "04/03/2022",
+                "payment_status": "paid"
+            }
+        ],
+        "profiles": [
+            {   
+                "profile_id": "A3P2",
+                "profile_name": "Kuldip2",
+                "age_restriction": true
+            },
+            {
+                "profile_id": "A3P1",
+                "profile_name": "Kuldip1",
+                "age_restriction": false
+            }
+        ],
+        "service_requests": [
+            {
+                "service_id": "A3S2",
+                "complaint": "Issue of Movie Page",
+                "status": "resolving",
+                "date": "01/01/2022",
+                "time": "10:00",
+                "isresolved": false
+            },
+            {
+                "service_id": "A3S1",
+                "complaint": "My watch history is incorrect",
+                "status": "complete",
+                "date": "01/01/2022",
+                "time": "10:00",
+                "isresolved": true
+            }
+        ]
+    }
+]
