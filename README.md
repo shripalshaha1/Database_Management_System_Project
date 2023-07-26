@@ -3,7 +3,7 @@ The SJSU Movie Database (SMD) project aims to design and implement a database to
 
 ## Two implementations of the database are developed and compared:
 
-### Relational database using MySQL
+### 1. Relational database using MySQL
 * Uses ER diagram and relational schema to model movies, users, profiles, billing etc. as separate relational tables.
   
 * Implements core functions like user signup, creating profiles, searching movies, filtering by criteria, updating ratings/likes, generating statements etc. using SQL queries, triggers and stored procedures.
@@ -11,7 +11,7 @@ The SJSU Movie Database (SMD) project aims to design and implement a database to
 * Optimized to leverage MySQL's capabilities like transactions, indexing, constraints for a robust relational database.
 
   
-### Document database using MongoDB
+### 2. Document database using MongoDB
 *Flexible schema stores movies, users, profiles as nested documents instead of separate tables
 *Implements same key functions using MongoDB queries, aggregations leveraging its dynamic document model and native indexing
 *Embedded data model and denormalization optimizes for faster reads and throughput for this use case.
